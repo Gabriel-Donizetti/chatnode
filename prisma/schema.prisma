@@ -11,15 +11,15 @@ datasource db {
 }
 
 model User {
-  id        String @id @default(uuid())
+  id        String  @id @default(uuid())
   name      String
-  email     String @unique
+  email     String  @unique
   password  String
   url_image String?
 
-  friends Friends[]
-  chats Chats[]
-
+  friends        Friends[]
+  chats          Chats[]
+  invite_friends InviteFriends[]
   @@map("user")
 }
 
@@ -31,32 +31,46 @@ model Friends {
 
   chats Chats[]
 
-  user User @relation(fields: [friends_user], references: [id])
+  user         User   @relation(fields: [friends_user], references: [id])
   friends_user String
+
+  send_invite_friends InviteFriends[]
 
   @@map("friends")
 }
 
+model InviteFriends {
+  id         String   @id @default(uuid())
+  state      String
+  created_at DateTime @default(now())
+
+  user             User   @relation(fields: [user_send_invite], references: [id])
+  user_send_invite String
+
+  friend             Friends @relation(fields: [user_recive_invite], references: [id])
+  user_recive_invite String
+}
+
 model Chats {
   id String @id @default(uuid())
-  
+
   messages Messages[]
 
-  user User  @relation(fields: [user_chat], references: [id])
+  user      User   @relation(fields: [user_chat], references: [id])
   user_chat String
 
-  friend Friends @relation(fields: [friend_chat], references: [id])
+  friend      Friends @relation(fields: [friend_chat], references: [id])
   friend_chat String
 
   @@map("chats")
 }
 
 model Messages {
-  id String @id @default(uuid())
+  id         String   @id @default(uuid())
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
-  message String
+  message    String
 
-  chat Chats @relation(fields: [messages_chat], references: [id])
+  chat          Chats  @relation(fields: [messages_chat], references: [id])
   messages_chat String
 }
