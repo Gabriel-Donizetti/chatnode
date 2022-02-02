@@ -1,12 +1,13 @@
 import { Request, Response } from 'express'
-import { AddFriendService } from '../service/friends/addFriendService'
+import { InviteFriendService } from '../service/friends/inviteFriendService'
+import { ListReciveInviteService } from '../service/friends/listReciveInviteService'
 import { ListSendInviteService } from '../service/friends/listSendInviiteService'
 
 class FriendsController {
-    async addFriend(req: Request, res: Response) {
+    async inviteFriend(req: Request, res: Response) {
         const { user_id_send, user_id_revcive } = req.body
 
-        const service = new AddFriendService()
+        const service = new InviteFriendService()
 
         try {
             const result = await service.execute(user_id_send, user_id_revcive)
@@ -30,17 +31,23 @@ class FriendsController {
         }
     }
 
-    // async listReciveInvite(req: Request, res: Response) {
-    //     const service = 
+    async listReciveInvite(req: Request, res: Response) {
+        const { user_id_recive } =  req.body
 
-    //     try {
-    //         const result = await service
+        const service = new ListReciveInviteService()
 
-    //         return res.json(result)
-    //     } catch (error) {
-    //         return res.status(400).json({ message: 'Invites not found' })
-    //     }
-    // }
+        try {
+            const result = await service.execute(user_id_recive)
+
+            return res.json(result)
+        } catch (error) {
+            return res.status(400).json({ message: 'Invites not found' })
+        }
+    }
+
+    async addFriend(req: Request, res: Response) {
+
+    }
 
     async listFriends(req: Request, res: Response) {
 

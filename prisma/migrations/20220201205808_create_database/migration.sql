@@ -4,7 +4,7 @@ CREATE TABLE `user` (
     `name` VARCHAR(191) NOT NULL,
     `email` VARCHAR(191) NOT NULL,
     `password` VARCHAR(191) NOT NULL,
-    `url_image` VARCHAR(191) NOT NULL,
+    `url_image` VARCHAR(191) NULL,
 
     UNIQUE INDEX `user_email_key`(`email`),
     PRIMARY KEY (`id`)
@@ -17,6 +17,17 @@ CREATE TABLE `friends` (
     `email` VARCHAR(191) NOT NULL,
     `url_image` VARCHAR(191) NOT NULL,
     `friends_user` VARCHAR(191) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `InviteFriends` (
+    `id` VARCHAR(191) NOT NULL,
+    `state` VARCHAR(191) NOT NULL,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `user_id_send` VARCHAR(191) NOT NULL,
+    `user_recive_invite` VARCHAR(191) NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -43,6 +54,9 @@ CREATE TABLE `Messages` (
 
 -- AddForeignKey
 ALTER TABLE `friends` ADD CONSTRAINT `friends_friends_user_fkey` FOREIGN KEY (`friends_user`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `InviteFriends` ADD CONSTRAINT `InviteFriends_user_recive_invite_fkey` FOREIGN KEY (`user_recive_invite`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `chats` ADD CONSTRAINT `chats_user_chat_fkey` FOREIGN KEY (`user_chat`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

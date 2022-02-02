@@ -34,20 +34,17 @@ model Friends {
   user         User   @relation(fields: [friends_user], references: [id])
   friends_user String
 
-  send_invite_friends InviteFriends[]
 
   @@map("friends")
 }
 
 model InviteFriends {
-  id         String   @id @default(uuid())
-  state      String
-  created_at DateTime @default(now())
+  id             String   @id @default(uuid())
+  state          String
+  created_at     DateTime @default(now())
+  user_id_send String
 
-  user             User   @relation(fields: [user_send_invite], references: [id])
-  user_send_invite String
-
-  friend             Friends @relation(fields: [user_recive_invite], references: [id])
+  user             User   @relation(fields: [user_recive_invite], references: [id])
   user_recive_invite String
 }
 
